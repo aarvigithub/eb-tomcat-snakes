@@ -37,3 +37,19 @@ stages:
         Contents: '*.war'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
+    - script: cd $(System.DefaultWorkingDirectory) && sudo rm -rf src
+      displayName: 'Remove Files'
+
+- stage: Build
+  jobs:
+  - job: Build
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'tomcatsnakesconnection'
+        repository: 'tomcatsnakes'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: |
+          $(Build.BuildId)
+          $(Build.SourceVersion)
