@@ -9,7 +9,7 @@ trigger:
 pool: ravinewpool
 
 stages:
-- stage: Create a war file
+- stage: Create
   jobs:
   - job: create
     steps:
