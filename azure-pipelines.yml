@@ -37,8 +37,7 @@ stages:
         Contents: '*.war'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-    - script: cd $(System.DefaultWorkingDirectory) && sudo rm -rf src
-      displayName: 'Remove Files'
+    
 
 - stage: Build
   jobs:
@@ -53,3 +52,6 @@ stages:
         tags: |
           $(Build.BuildId)
           $(Build.SourceVersion)
+
+    - script: cd $(System.DefaultWorkingDirectory) && sudo rm -rf src
+      displayName: 'Remove Files'
