@@ -4,7 +4,7 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+- master123
 
 pool: ravinewpool
 
@@ -48,6 +48,11 @@ stages:
         tags: |
           $(Build.BuildId)
           $(Build.SourceVersion)
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'kube-manifests'
+        publishLocation: 'Container'
 
     - script: cd $(System.DefaultWorkingDirectory) && sudo rm -rf src
       displayName: 'Remove Files'
