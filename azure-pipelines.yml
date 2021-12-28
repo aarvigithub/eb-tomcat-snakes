@@ -31,12 +31,6 @@ stages:
     - script: echo The staging direectory id $(System.DefaultWorkingDirectory)
       displayName: 'staging directory'
 
-    - task: CopyFiles@2
-      inputs:
-        SourceFolder: $(System.DefaultWorkingDirectory)
-        Contents: '*.war'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
     
 
     - task: Docker@2
@@ -50,6 +44,12 @@ stages:
           $(Build.SourceVersion)
     - bash: echo Contents in System Default Working Directory; ls -R $(System.DefaultWorkingDirectory)
     - bash: echo Before copying Contents in Build Artifact Directory; ls -R $(Build.ArtifactStagingDirectory)
+
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: $(System.DefaultWorkingDirectory)
+        Contents: '**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
