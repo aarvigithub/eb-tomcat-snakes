@@ -1,0 +1,39 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool: ravinewpool
+
+stages:
+- stage: Create a war file
+  jobs:
+  - job: create
+    steps:
+    - script: |
+        echo The build id is : $(Build.BuildId)
+      displayName: 'Displaying the build id'
+
+    - script: sudo apt update >> /dev/null 2>&1 && sudo apt install openjdk-8-jdk -y
+      displayName: 'Installing the java version 8'
+
+    - script: pwd && ls -al && chmod 755 build.sh && sudo bash ./build.sh && ls -al
+      displayName: 'executing build'
+
+    - script: ls -al && mv ROOT.war ROOT$(Build.BuildId).war && ls -al
+      displayName: 'Renaming the war file '
+
+    - script: echo The staging direectory id $(Build.ArtifactStagingDirectory)
+      displayName: 'staging directory'
+    - script: echo The staging direectory id $(System.DefaultWorkingDirectory)
+      displayName: 'staging directory'
+
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: $(System.DefaultWorkingDirectory)
+        Contents: '*.war'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
